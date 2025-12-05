@@ -13,11 +13,11 @@ The aim is to give the business a complete view of:
 The pipeline covers extraction of complaints from different sources, storage, processing, modeling, scheduling, and deployment using modern data engineering tools.
 
 ## Data Sources
-- Call Center System - compliant logs
+- Call Center System - complaint logs
 - Website Portal - complaint tables
 - Social Media - Structured complaint data from different channels
-- Customers Data
-- Agents Data
+- Customer Details Data
+- Agent Details Data
 
 ## Source Storage Types
 - AWS S3 (CSV + JSON files)
