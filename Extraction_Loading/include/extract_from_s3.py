@@ -1,13 +1,12 @@
 def _extract_from_s3(filename):
     """Extract csv or json file from S3
     parameters:
-    bucket name 
+    bucket name
     filename(key)
-      
+
     returns a dataframe"""
 
     import pandas as pd
-    import awswrangler as wr
     import json
     import boto3
     from include.logging_config import get_logger
@@ -15,30 +14,30 @@ def _extract_from_s3(filename):
     logger = get_logger(__name__)
 
     logger.info(f"Extracting file from S3: {filename}")
-    
+
     s3 = boto3.client("s3")
     bucket = 'core-telecoms-data-lake'
-    
+
     # Detect file type from extension
     extension = filename.split(".")[-1].lower()
-    
+
     try:
 
         if extension == 'csv':
-            obj = s3.get_object(Bucket= bucket, Key= filename) 
+            obj = s3.get_object(Bucket=bucket, Key=filename)
             df = pd.read_csv(obj['Body'])
             logger.info(f"CSV extraction successful: {filename}")
             return df
-        
+
         elif extension == 'json':
-            obj = s3.get_object(Bucket = bucket, Key = filename)
+            obj = s3.get_object(Bucket=bucket, Key=filename)
             data = obj["Body"].read()
-            file = json.loads(data) #load data into variable
-            df = pd.DataFrame([file]) #convert to dataframe
+            file = json.loads(data)  # load data into variable
+            df = pd.DataFrame([file])  # convert to dataframe
 
-            expanded_rows = [] #empty list to append unnested data
+            expanded_rows = []  # empty list to append unnested data
 
-            row = df.iloc[0] #get the row as series for easy itertaion
+            row = df.iloc[0]  # get the row as series for easy itertaion
 
             keys = list(row[df.columns[0]].keys())
             for k in keys:

@@ -1,6 +1,5 @@
 def param(name, decrypt=False):
-        """get parameter values from aws ssm""" 
-
+        """get parameter values from aws ssm"""
         import boto3
         from include.logging_config import get_logger
 

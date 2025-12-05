@@ -21,8 +21,8 @@ with DAG(
     max_active_runs=1,
     max_active_tasks=3
 ):
-    
-       # --- Extraction functions wrapped to lazy-import heavy modules ---
+
+    #  Extraction functions wrapped to lazy-import heavy modules 
     def run_extract_load_customer():
         from customers import _extract_load_customer
         _extract_load_customer()
@@ -69,7 +69,7 @@ with DAG(
         python_callable=run_extract_load_web_complaints
     )
 
-    #Loading to Snowflakes - Airbyte 
+    # Loading to Snowflakes - Airbyte 
     sync_customers = AirbyteTriggerSyncOperator(
         task_id="airbyte_sync_customers",
         airbyte_conn_id="airbyte_conn",
@@ -79,7 +79,7 @@ with DAG(
         wait_seconds=10,
     )
 
-    sync_agents= AirbyteTriggerSyncOperator(
+    sync_agents = AirbyteTriggerSyncOperator(
         task_id="airbyte_sync_agents",
         airbyte_conn_id="airbyte_conn",
         connection_id="6f393b3b-b498-41a4-b1c3-8bdc0b711bc5",
@@ -89,7 +89,7 @@ with DAG(
 
     )
 
-    sync_call_logs=AirbyteTriggerSyncOperator(
+    sync_call_logs = AirbyteTriggerSyncOperator(
         task_id="airbyte_sync_call_logs",
         airbyte_conn_id="airbyte_conn",
         connection_id="2e8825fb-ed81-4e28-bac9-e99252b19cd8",
@@ -98,7 +98,7 @@ with DAG(
         wait_seconds=10,
     )
 
-    sync_social_media=AirbyteTriggerSyncOperator(
+    sync_social_media = AirbyteTriggerSyncOperator(
         task_id="airbyte_social_media",
         airbyte_conn_id="airbyte_conn",
         connection_id="4010d494-3288-402f-866f-8394b7e1a707",
@@ -107,7 +107,7 @@ with DAG(
         wait_seconds=10,
     )
 
-    sync_website_complaints=AirbyteTriggerSyncOperator(
+    sync_website_complaints = AirbyteTriggerSyncOperator(
         task_id="airbyte_website_form",
         airbyte_conn_id="airbyte_conn",
         connection_id="d337d6c6-5373-4351-a088-3b726f4ea9c5",
@@ -126,7 +126,6 @@ with DAG(
         bash_command="python3 /opt/airflow/dbt/generate_profiles_yml.py"
     )
 
-
     dbt_run_dims = BashOperator(
         task_id="dbt_run_customers_agents",
         bash_command=(
@@ -139,18 +138,17 @@ with DAG(
 
     dbt_run_call_logs = BashOperator(
         task_id="dbt_run_call_logs",
-        bash_command = (
+        bash_command=(
             f"cd {DBT_PROJECT_DIR} && "
             f"dbt deps --profiles-dir {DBT_PROFILES_DIR} && "
             f"dbt run --select path:models/silver/call_center --profiles-dir {DBT_PROFILES_DIR} "
             f"2>&1 | tee {LOG_DIR}/dbt_run_call_center.log"
 
-        )
-          )
-    
+        ))
+
     dbt_run_social_media = BashOperator(
         task_id="dbt_run_social_media",
-        bash_command = (
+        bash_command=(
             f"cd {DBT_PROJECT_DIR} && "
             f"dbt deps --profiles-dir {DBT_PROFILES_DIR} && "
             f"dbt run --select path:models/silver/social_media --profiles-dir {DBT_PROFILES_DIR} "
@@ -160,8 +158,8 @@ with DAG(
     )
 
     dbt_run_web_complaints = BashOperator(
-        task_id = "dbt_run_web_forms",
-        bash_command = (
+        task_id="dbt_run_web_forms",
+        bash_command=(
             f"cd {DBT_PROJECT_DIR} && "
             f"dbt deps --profiles-dir {DBT_PROFILES_DIR} && "
             f"dbt run --select path:models/silver/website_complaints --profiles-dir {DBT_PROFILES_DIR} "
@@ -172,7 +170,7 @@ with DAG(
 
     dbt_run_complaints = BashOperator(
         task_id="dbt_complaints",
-        bash_command = (
+        bash_command=(
             f"cd {DBT_PROJECT_DIR} && "
             f"dbt deps --profiles-dir {DBT_PROFILES_DIR} && "
             f"dbt run --select path:models/gold/complaints --profiles-dir {DBT_PROFILES_DIR} "
@@ -182,8 +180,8 @@ with DAG(
     )
 
     dbt_test = BashOperator(
-        task_id = "dbt_test",
-        bash_command = (
+        task_id="dbt_test",
+        bash_command=(
             f"cd {DBT_PROJECT_DIR} && "
             f"dbt deps --profiles-dir {DBT_PROFILES_DIR} && "
             f"dbt test --profiles-dir {DBT_PROFILES_DIR} "

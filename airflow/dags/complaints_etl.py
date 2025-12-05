@@ -14,7 +14,7 @@ default_args = {
 with DAG(
     dag_id="complaints_elt_pipeline",
     default_args=default_args,
-    schedule=None,
+    schedule='@daily',
     catchup=False,
     max_active_runs=1,
     max_active_tasks=3
@@ -39,7 +39,9 @@ with DAG(
     def run_extract_load_web_complaints():
         from web_complaints import _extract_load_web_complaints
         _extract_load_web_complaints()
+
     # Lazy Airbyte operators
+
     def sync_customers_task():
         from airflow.providers.airbyte.operators.airbyte import AirbyteTriggerSyncOperator
 
@@ -51,7 +53,6 @@ with DAG(
             timeout=2300,
             wait_seconds=10,
         )
-
 
     def sync_agents_task():
         from airflow.providers.airbyte.operators.airbyte import AirbyteTriggerSyncOperator
@@ -65,7 +66,6 @@ with DAG(
             wait_seconds=10,
         )
 
-
     def sync_call_logs_task():
         from airflow.providers.airbyte.operators.airbyte import AirbyteTriggerSyncOperator
 
@@ -77,7 +77,6 @@ with DAG(
             timeout=2300,
             wait_seconds=10,
         )
-
 
     def sync_social_media_task():
         from airflow.providers.airbyte.operators.airbyte import AirbyteTriggerSyncOperator
@@ -91,7 +90,6 @@ with DAG(
             wait_seconds=10,
         )
 
-
     def sync_website_complaints_task():
         from airflow.providers.airbyte.operators.airbyte import AirbyteTriggerSyncOperator
 
@@ -104,9 +102,6 @@ with DAG(
             wait_seconds=10,
         )
 
-
-    
-    
     # Extract and loading
     extract_load_customers = PythonOperator(
         task_id="extract_load_customers",
@@ -140,9 +135,8 @@ with DAG(
     sync_social_media = sync_social_media_task()
     sync_website_complaints = sync_website_complaints_task()
 
-   
     # DBT tasks
-    #DBT Transform - run dims > facts > gold
+    # DBT Transform - run dims > facts > gold
     DBT_PROJECT_DIR = "/opt/airflow/dbt"
     LOG_DIR = "/opt/airflow/logs/complaints_etl"
     DBT_PROFILES_DIR = "/opt/airflow/.dbt"
@@ -151,7 +145,6 @@ with DAG(
         task_id="generate_dbt_profiles",
         bash_command="python3 /opt/airflow/dbt/generate_profiles_yml.py"
     )
-
 
     dbt_run_dims = BashOperator(
         task_id="dbt_run_customers_agents",
@@ -165,18 +158,17 @@ with DAG(
 
     dbt_run_call_logs = BashOperator(
         task_id="dbt_run_call_logs",
-        bash_command = (
+        bash_command=(
             f"cd {DBT_PROJECT_DIR} && "
             f"dbt deps --profiles-dir {DBT_PROFILES_DIR} && "
             f"dbt run --select path:models/silver/call_center --profiles-dir {DBT_PROFILES_DIR} "
             f"2>&1 | tee {LOG_DIR}/dbt_run_call_center.log"
 
-        )
-          )
-    
+        ))
+
     dbt_run_social_media = BashOperator(
         task_id="dbt_run_social_media",
-        bash_command = (
+        bash_command=(
             f"cd {DBT_PROJECT_DIR} && "
             f"dbt deps --profiles-dir {DBT_PROFILES_DIR} && "
             f"dbt run --select path:models/silver/social_media --profiles-dir {DBT_PROFILES_DIR} "
@@ -186,8 +178,8 @@ with DAG(
     )
 
     dbt_run_web_complaints = BashOperator(
-        task_id = "dbt_run_web_forms",
-        bash_command = (
+        task_id="dbt_run_web_forms",
+        bash_command=(
             f"cd {DBT_PROJECT_DIR} && "
             f"dbt deps --profiles-dir {DBT_PROFILES_DIR} && "
             f"dbt run --select path:models/silver/website_complaints --profiles-dir {DBT_PROFILES_DIR} "
@@ -198,7 +190,7 @@ with DAG(
 
     dbt_run_complaints = BashOperator(
         task_id="dbt_complaints",
-        bash_command = (
+        bash_command=(
             f"cd {DBT_PROJECT_DIR} && "
             f"dbt deps --profiles-dir {DBT_PROFILES_DIR} && "
             f"dbt run --select path:models/gold/complaints --profiles-dir {DBT_PROFILES_DIR} "
@@ -208,8 +200,8 @@ with DAG(
     )
 
     dbt_test = BashOperator(
-        task_id = "dbt_test",
-        bash_command = (
+        task_id="dbt_test",
+        bash_command=(
             f"cd {DBT_PROJECT_DIR} && "
             f"dbt deps --profiles-dir {DBT_PROFILES_DIR} && "
             f"dbt test --profiles-dir {DBT_PROFILES_DIR} "
@@ -217,7 +209,7 @@ with DAG(
 
         )
     )
-    
+
     # ------------------------
     # DAG dependencies
 

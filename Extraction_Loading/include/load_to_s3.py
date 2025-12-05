@@ -11,7 +11,6 @@ def _load_parquet(df, prefix, filename):
     from datetime import datetime, timezone
     from include.logging_config import get_logger
     import json
-    
 
     logger = get_logger(__name__)
 
@@ -23,8 +22,6 @@ def _load_parquet(df, prefix, filename):
     }
 
     metadata_key = f"{prefix}{filename.replace('.parquet', '')}_metadata.json"
-
-
     path = f"s3://{bucket}/{prefix}{filename}"
 
     try:
@@ -32,7 +29,7 @@ def _load_parquet(df, prefix, filename):
 
         wr.engine.set("python")
         wr.memory_format.set("pandas")
-       
+
         wr.s3.to_parquet(
             df=df,
             path=path,
@@ -43,8 +40,6 @@ def _load_parquet(df, prefix, filename):
 
         logger.info("Adding metadata")
         s3 = boto3.client("s3")
-       
-
         s3.put_object(
             Bucket=bucket,
             Key=metadata_key,
