@@ -11,7 +11,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy Airflow project files
 COPY airflow/dags/ /opt/airflow/dags/
-COPY airflow/plugins/ /opt/airflow/plugins/
 COPY airflow/config/ /opt/airflow/config/
 
 # Copy ETL scripts
