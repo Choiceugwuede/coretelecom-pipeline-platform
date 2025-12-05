@@ -1,0 +1,188 @@
+version: 2
+
+sources: 
+  - name: bronze
+    schema: BRONZE
+    description: "Airbyte raw ingestion layer"
+    
+    config: 
+      freshness:
+        warn_after: {count:3 period: day}
+      loaded_at_field: _AIRBYTE_EXTRACTED_AT 
+      
+
+    tables:
+      - name: AGENTS
+        description: "Agents that handled complaints"
+        columns:
+          - name: ID
+            data_tests:
+              - unique
+              - not_null
+    
+      - name: CUSTOMERS
+        columns:
+         - name: CUSTOMER_ID
+           data_tests:
+           - unique 
+           - not_null
+
+      - name: CALL_CENTER
+      - name: SOCIAL_MEDIA
+      - name: WEBSITE_CUSTOMER_COMPLAINTS
+
+models:
+  - name: dim_customers
+    description: "customer dimension table with SCD logic"
+    config:
+      columns:
+        - name: CUSTOMER_SK
+          data_tests:
+            - not_null
+            - unique
+          description: surrogate key, auto incremented.
+        - name: CUSTOMER_ID
+          description: "natural key"
+          data_tests:
+            - not_null
+        - name: NAME
+        - name: EMAIL
+        - name: GENDER
+        - name: ADDRESS
+        - name: SIGNUP_DATE
+        - name: DATE_OF_BIRTH
+        - name: created_at 
+        - name: updated_at 
+  
+  - name: dim_agents
+    description: "Agent dimension table with SCD logic"
+    columns:
+      - name: AGENT_SK
+        description: surrogate key, auto incremented.
+        data_tests:
+          - not_null
+          - unique
+      - name: ID
+        data_tests:
+          - not_null
+      - name: NAME
+      - name: STATE
+      - name: EXPERIENCE 
+      - name: created_at
+      - name: updated_at
+
+  - name: call_center
+    description: "Fact table for call center log complaints"
+    columns:
+      - name: CALL_SK
+        description: "surrogate hash key for call logs"
+        data_tests:
+          - unique 
+          - not_null
+      - name: CALL_ID
+        data_tests:
+          - not_null
+      - name: AGENT_ID
+        data_tests:
+          - not_null
+      - name: CUSTOMER_ID
+        data_tests:
+          - not_null
+      - name: CALL_END_TIME
+      - name: CALL_START_TIME
+      - name: RESOLUTIONSTATUS
+      - name: COMPLAINT_CATEGORY
+      - name: CALLLOGSGENERATIONDATE
+      - name: created_at 
+     
+
+  - name: website_complaints
+    description: "fact table for cussomer complaints form"
+    columns:
+      - name: WEB_SK
+        description: "surrogate hash key for website forms"
+        data_tests:
+          - unique 
+          - not_null
+      - name: AGENT_ID
+        data_tests:
+          - not_null
+      - name: REQUEST_ID
+      - name: CUSTOMER_ID
+        data_tests:
+          - not_null
+      - name: REQUEST_DATE
+      - name: RESOLUTION_DATE
+      - name: RESOLUTIONSTATUS
+      - name: COMPLAINT_CATEGORY
+      - name: WEBFORMGENERATIONDATE
+      - name: created_at
+      
+
+  - name: social_media
+    description: "Fact table for social media channels"
+    columns:
+      - name: SOCIAL_SK
+        description: "surrogate hash key for social media complaints"
+        data_tests:
+          - unique 
+          - not_null
+      - name: SCR_KEY
+      - name: AGENT_ID
+        data_tests:
+          - not_null
+      - name: COMPLAINT_CATEGORY
+      - name: CUSTOMER_ID
+        data_tests:
+          - not_null
+      - name: COMPLAINT_ID
+        data_tests:
+          - not_null
+      - name: MEDIACOMPLAINTGENERATIONDATE
+      - name: REQUEST_DATE
+      - name: MEDIA_CHANNEL
+      - name:  RESOLUTION_DATE
+      - name: RESOLUTIONSTATUS
+      - name: COMPLAINT_CATEGORY
+      - name: created_at
+
+  - name: complaints
+    description: "Consolidated fact table combining call_center, social media, and website"
+    columns:
+      - name: COMPLAINT_SK
+        description: "Unique hash surrogate key, combining fact surrogate keys and source"
+        data_tests:
+          - unique
+          - not_null
+      - name: COMPLAINT_ID
+        description: "Original surrogate key from each fact table"
+        data_tests:
+          - not_null
+      
+      - name: AGENT_ID
+        description: "Surrogate key of agent from dimension table"
+        data_tests:
+          - not_null
+      
+      - name: CUSTOMER_ID
+        description: "Surrogate key from customer dimension table"
+        data_tests:
+          - not_null
+      - name: RESOLUTIONSTATUS
+      - name: REQUEST_DATE
+      - name: RESOLUTION_DATE
+      - name: MEDIA_CHANNEL
+      - name: COMPLAINTGENERATIONDATE
+        description: "Generation date of complaints from sources"
+      - name: COMPLAINT_SOURCE
+        description: "Source table of complaints (call_center, social_media, website_complaints)"
+      - name: created_at
+        description: "Timestamp when row was created in source fact tables"
+      - name: TBL_DT
+        description: "Date when row was loaded into this table"
+        data_tests:
+          - not_null
+      
+    
+
+    

@@ -1,0 +1,8 @@
+Transform/logs/
+Transform/dbt_transform/dbt_packages/
+__pycache__/
+*.pyc
+Transform/dbt_transform/target/
+airflow/__pycache__/
+logs/
+.env
