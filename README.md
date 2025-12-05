@@ -2,7 +2,7 @@
 
 ## Project Overview 
 
-This project delivers a full containerized data pipeline that brings together customer complaints from different channels into one structured and analytics-ready platform. This would curb the current company's challenge of keeping up with customer complaints leading to loss of customers.
+This project delivers a full containerized data pipeline that brings together customer complaints from different channels into one structured and analytics-ready platform. This would curb the company's challenge of keeping up with customer complaints leading to loss of customers.
 
 The aim is to give the business a complete view of:
 - customer complaints
