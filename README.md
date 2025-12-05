@@ -107,7 +107,7 @@ Github Actions pipeline includes:
 
 ##  Set Up And Run 
 
-** Prerequisites**
+**Prerequisites**
 - Docker Desktop
 - Access to Snowflake
 - Access to Airbyte Cloud
@@ -131,15 +131,3 @@ Github Actions pipeline includes:
 
 4. Open Airflow UI
    Go to: http://localhost:8080 to view Dag Runs 
-
-
-
-
-
-
-
-
-
-
-
-DATA 
