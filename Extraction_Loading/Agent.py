@@ -9,7 +9,6 @@ def _extract_load_agent():
     from include.logging_config import get_logger
 
     logger = get_logger(__name__)
-    
     # Parameters
     prefix = 'raw/agents/'
     filename = 'agents.parquet'
@@ -19,7 +18,7 @@ def _extract_load_agent():
 
     try:
         creds = service_account.Credentials.from_service_account_info(
-            google_cred, scopes=SCOPES) 
+            google_cred, scopes=SCOPES)
         logger.info("Succesfully verified google creds...")
     except Exception as e:
         logger.error(f'Failed to verify google cred: {e}')
@@ -40,7 +39,7 @@ def _extract_load_agent():
             .execute()
         )
         values = result.get("values", [])
-        df = pd.DataFrame(values[1:], columns=values[0])   
+        df = pd.DataFrame(values[1:], columns=values[0])
         logger.info(f'Sucessfully extracted {range_name}')
     except Exception as err:
         logger.error(f'File not extracted: {err}')
@@ -49,4 +48,3 @@ def _extract_load_agent():
         _load_parquet(df, prefix, filename)
     else:
         logger.error("Skipping load: df was not created due to previous errors.")
-    
