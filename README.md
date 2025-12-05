@@ -31,7 +31,7 @@ The pipeline covers extraction of complaints from different sources, storage, pr
 - DBT: Used for transformation and modelling.
 - Apache Airflow: Used to orchestrate the entire pipeline.
 - Terraform: Manages cloud resources such as Snowflake objects, S3 bucket, roles, and permissions, Airbtye objects (Source, Destinations, and Connectors)
-- Docker: Packages Airflow, dbt, and extract scripts into containers
+- Docker: Packages Airflow, dbt, and extract scripts into an image.
 - Github Actions: Provides CI/CD for linting (flake8), building images, and pushing to Docker Hub.
 
 ## High-Level Architecture 
