@@ -22,7 +22,7 @@ with DAG(
     max_active_tasks=3
 ):
 
-    #  Extraction functions wrapped to lazy-import heavy modules 
+    #  Extraction functions wrapped to lazy-import heavy modules
     def run_extract_load_customer():
         from customers import _extract_load_customer
         _extract_load_customer()
@@ -43,7 +43,7 @@ with DAG(
         from web_complaints import _extract_load_web_complaints
         _extract_load_web_complaints()
 
-    # Extract and load 
+    # Extract and load
     extract_load_customers = PythonOperator(
         task_id="extract_load_customers",
         python_callable=run_extract_load_customer
@@ -69,7 +69,7 @@ with DAG(
         python_callable=run_extract_load_web_complaints
     )
 
-    # Loading to Snowflakes - Airbyte 
+    # Loading to Snowflakes - Airbyte
     sync_customers = AirbyteTriggerSyncOperator(
         task_id="airbyte_sync_customers",
         airbyte_conn_id="airbyte_conn",

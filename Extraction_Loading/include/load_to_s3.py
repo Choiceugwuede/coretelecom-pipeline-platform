@@ -1,5 +1,5 @@
 def _load_parquet(df, prefix, filename):
-    """Writes a dataframe to s3 in parquet format 
+    """Writes a dataframe to s3 in parquet format
     parameter:
     df: dataframe
     prefix: destination folder structure, e.g raw/customer
