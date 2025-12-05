@@ -25,10 +25,18 @@ def _create_connection():
             user = username,
             port = port )
         
+
         cursor = connection.cursor()
+        cursor.execute("SET statement_timeout = 600000;")  # 10 minutes
+        cursor.close()
 
         logger.info("Succesfully created postgres engine")
-        return cursor      
+        return connection     
     except Exception as e:
         logger.error(f"Failed creating Postgres engine: {e}")
         raise
+ 
+        
+  
+
+    

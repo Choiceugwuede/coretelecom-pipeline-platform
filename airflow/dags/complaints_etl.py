@@ -216,11 +216,11 @@ with DAG(
     # DAG dependencies
 
     # Extract -> Airbyte
+    extract_load_web_complaints >> sync_website_complaints
     extract_load_customers >> sync_customers
     extract_load_agents >> sync_agents
     extract_load_call_center >> sync_call_logs
     extract_load_social_media >> sync_social_media
-    extract_load_web_complaints >> sync_website_complaints
 
     # Airbyte -> DBT
     [
