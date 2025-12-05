@@ -1,6 +1,5 @@
 def _extract_load_call_center():
 
-    import pandas as pd
     from include.extract_from_s3 import _extract_from_s3
     from include.load_to_s3 import _load_parquet
     from datetime import datetime, timedelta

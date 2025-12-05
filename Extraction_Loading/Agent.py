@@ -9,8 +9,7 @@ def _extract_load_agent():
     from include.logging_config import get_logger
 
     logger = get_logger(__name__)
-
-
+    
     # Parameters
     prefix = 'raw/agents/'
     filename = 'agents.parquet'

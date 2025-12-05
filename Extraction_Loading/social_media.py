@@ -25,4 +25,3 @@ def _extract_load_social_media():
         _load_parquet(social_media, prefix, filename)
 
         current_date += timedelta(days=1)
-

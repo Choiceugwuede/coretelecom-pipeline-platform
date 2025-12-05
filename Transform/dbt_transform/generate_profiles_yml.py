@@ -2,18 +2,23 @@ from pathlib import Path
 import boto3
 
 
-def param(name, decrypt=False):
-  """get parameter values from aws ssm""" 
-  ssm = boto3.client("ssm", region_name="eu-north-1") 
-  return ssm.get_parameter(Name=name, WithDecryption=decrypt)["Parameter"]["Value"]
+def param(name: str, decrypt: bool = False) -> str:
+    """Get parameter values from AWS SSM Parameter Store."""
+    ssm = boto3.client("ssm", region_name="eu-north-1")
+    response = ssm.get_parameter(Name=name, WithDecryption=decrypt)
+    return response["Parameter"]["Value"]
 
+
+# Retrieve Snowflake credentials from SSM
 account = param("/coretelcom/snowflake/account_host")
 password = param("/coretelcom/snowflake/password")
-user =  param("/coretelcom/snowflake/username")
+user = param("/coretelcom/snowflake/username")
 
+# Create DBT profiles directory
 profiles_dir = Path("/opt/airflow/.dbt")
 profiles_dir.mkdir(parents=True, exist_ok=True)
 
+# Build DBT profiles.yml content
 profiles_content = f"""
 default:
   target: dev
@@ -30,5 +35,6 @@ default:
       warehouse: COMPUTE_WH
 """
 
-with open(profiles_dir / "profiles.yml", "w") as f:
+# Write profiles.yml file
+with open(profiles_dir / "profiles.yml", "w", encoding="utf-8") as f:
     f.write(profiles_content)

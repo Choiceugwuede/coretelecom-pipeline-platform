@@ -58,5 +58,3 @@ def _load_parquet(df, prefix, filename):
     except Exception as e:
         logger.error(f'unable to load to S3: {e}')
         raise
-
-

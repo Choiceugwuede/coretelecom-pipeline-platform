@@ -116,7 +116,7 @@ with DAG(
         wait_seconds=10,
     )
 
-    #DBT Transform - run dims > facts > gold
+    # DBT Transform - run dims > facts > gold
     DBT_PROJECT_DIR = "/opt/airflow/dbt"
     LOG_DIR = "/opt/airflow/logs/complaints_etl"
     DBT_PROFILES_DIR = "/opt/airflow/.dbt"

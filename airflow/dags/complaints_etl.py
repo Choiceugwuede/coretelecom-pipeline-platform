@@ -19,8 +19,6 @@ with DAG(
     max_active_runs=1,
     max_active_tasks=3
 ):
-
-   
     # Lazy extraction functions
     def run_extract_load_customer():
         from customers import _extract_load_customer
@@ -41,11 +39,10 @@ with DAG(
     def run_extract_load_web_complaints():
         from web_complaints import _extract_load_web_complaints
         _extract_load_web_complaints()
-
-  
     # Lazy Airbyte operators
     def sync_customers_task():
         from airflow.providers.airbyte.operators.airbyte import AirbyteTriggerSyncOperator
+
         return AirbyteTriggerSyncOperator(
             task_id="airbyte_sync_customers",
             airbyte_conn_id="airbyte_conn",
@@ -55,8 +52,10 @@ with DAG(
             wait_seconds=10,
         )
 
+
     def sync_agents_task():
         from airflow.providers.airbyte.operators.airbyte import AirbyteTriggerSyncOperator
+
         return AirbyteTriggerSyncOperator(
             task_id="airbyte_sync_agents",
             airbyte_conn_id="airbyte_conn",
@@ -66,8 +65,10 @@ with DAG(
             wait_seconds=10,
         )
 
+
     def sync_call_logs_task():
         from airflow.providers.airbyte.operators.airbyte import AirbyteTriggerSyncOperator
+
         return AirbyteTriggerSyncOperator(
             task_id="airbyte_sync_call_logs",
             airbyte_conn_id="airbyte_conn",
@@ -77,8 +78,10 @@ with DAG(
             wait_seconds=10,
         )
 
+
     def sync_social_media_task():
         from airflow.providers.airbyte.operators.airbyte import AirbyteTriggerSyncOperator
+
         return AirbyteTriggerSyncOperator(
             task_id="airbyte_social_media",
             airbyte_conn_id="airbyte_conn",
@@ -88,8 +91,10 @@ with DAG(
             wait_seconds=10,
         )
 
+
     def sync_website_complaints_task():
         from airflow.providers.airbyte.operators.airbyte import AirbyteTriggerSyncOperator
+
         return AirbyteTriggerSyncOperator(
             task_id="airbyte_website_form",
             airbyte_conn_id="airbyte_conn",
@@ -98,6 +103,7 @@ with DAG(
             timeout=2300,
             wait_seconds=10,
         )
+
 
     
     
@@ -215,14 +221,14 @@ with DAG(
     # ------------------------
     # DAG dependencies
 
-    # Extract -> Airbyte
+    # Extract - Airbyte
     extract_load_web_complaints >> sync_website_complaints
     extract_load_customers >> sync_customers
     extract_load_agents >> sync_agents
     extract_load_call_center >> sync_call_logs
     extract_load_social_media >> sync_social_media
 
-    # Airbyte -> DBT
+    # Airbyte - DBT
     [
         sync_customers,
         sync_agents,
@@ -231,15 +237,15 @@ with DAG(
         sync_website_complaints
     ] >> generate_profiles >> dbt_run_dims
 
-    # dbt dims -> fact models
+    # dbt dims - fact models
     dbt_run_dims >> dbt_run_call_logs
     dbt_run_dims >> dbt_run_social_media
     dbt_run_dims >> dbt_run_web_complaints
 
-    # fact models -> complaints fact
+    # fact models - complaints fact
     dbt_run_call_logs >> dbt_run_complaints
     dbt_run_social_media >> dbt_run_complaints
     dbt_run_web_complaints >> dbt_run_complaints
 
-    # complaints fact -> dbt test
+    # complaints fact - dbt test
     dbt_run_complaints >> dbt_test

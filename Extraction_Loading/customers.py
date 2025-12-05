@@ -12,4 +12,4 @@ def _extract_load_customer():
     customers = _extract_from_s3(source_file)
 
     # load to parquet in core telcom bucket 
-    _load_parquet(customers,prefix,filename)
+    _load_parquet(customers, prefix, filename)

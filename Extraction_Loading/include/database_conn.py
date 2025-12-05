@@ -1,7 +1,6 @@
 def _create_connection():
     """Create engine to connect to postgres database for customer complaints"""
     
-    from sqlalchemy import create_engine
     from include.get_parameter import param
     from include.logging_config import get_logger
     import psycopg2
