@@ -9,16 +9,15 @@ exclude =
     .mypy_cache,
     .pytest_cache
 
-# Ignore specific rules
 ignore =
-    E402,  # imports not at top of file
-    E266,  # too many leading '#' for block comments
-    E722,  # bare except - allow it for Airflow retry blocks
-    W503,  # line break before binary operator (PEP8 change)
-    D100,  # missing docstring in public module
-    D101,  # missing docstring in public class
-    D102,  # missing docstring in public method
-    D103,  # missing docstring in public function
-    D104,  # missing docstring in public package
-    D105,  # missing docstring in magic method
-    D107   # missing docstring in __init__
+    E402,  
+    E266, 
+    E722,  
+    W503,  
+    D100,  
+    D101,  
+    D102,  
+    D103,  
+    D104,  
+    D105,  
+    D107   
