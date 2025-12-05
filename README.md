@@ -35,6 +35,9 @@ The pipeline covers extraction of complaints from different sources, storage, pr
 - Github Actions: Provides CI/CD for linting (flake8), building images, and pushing to Docker Hub.
 
 ## High-Level Architecture 
+
+<img width="3268" height="2596" alt="image" src="https://github.com/user-attachments/assets/506dbf2f-1f36-4393-9dd6-6504af5d12d7" />
+
 The platform follows a clean three-layer structure:
 1. Ingestion Layer
    - Raw extraction from S3, Google Sheets, and PostgreSQL.
