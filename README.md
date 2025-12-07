@@ -80,8 +80,16 @@ The entire workflpow is automated through Airflow.
     - surrogate keys using dbt_utils
     - SCD1 for dimension tables
     - Clustering for performance
-    - Gold final table for analytics
+    - final table for analytics
   - All dbt tests passed (27/27)
+
+    #### Entity Relationship Diagram
+    <img width="894" height="1392" alt="Entity Relationship Diagram" src="https://github.com/user-attachments/assets/9836cb75-9b85-4787-8e32-f14e370fac0d" />
+
+    #### Final Analysis Table
+    Consolidated view of all complaints across channels for analysis and dowsntream use.
+
+    ![Final Table](https://github.com/user-attachments/assets/55cbf94d-1737-4314-8d26-d27816e9ed0e)
 
 **D. Orchestration (Airflow)**
 
