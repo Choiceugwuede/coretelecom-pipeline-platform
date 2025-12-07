@@ -20,7 +20,7 @@ profiles_dir.mkdir(parents=True, exist_ok=True)
 
 # Build DBT profiles.yml content
 profiles_content = f"""
-default:
+dbt_transform:
   target: dev
   outputs:
     dev:
