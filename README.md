@@ -126,8 +126,8 @@ Github Actions pipeline includes:
 
 1. Clone the repository
    ```bash
-   git clone https://github.com/<your-repo>
-   cd coretelecom
+   git clone https://github.com/Choiceugwuede/coretelecom-pipeline-platform.git
+   cd coretelecom-pipeline-platform
    ```
 2. Create a .env file
    Include your AWS keys (local only):
